@@ -38,4 +38,19 @@ public abstract class PairFunction<T, K, V> extends WrappedFunction1<T, Tuple2<K
   public ClassTag<V> valueType() {
     return (ClassTag<V>) ClassTag$.MODULE$.apply(Object.class);
   }
+
+  /**
+   * Support for Java 8 lambdas. Accepts a lambda and returns the PairFunction
+   * instance compatible with the Java 6/7 API
+   * @param f a lambda or instance of IPairFunction
+   * @return a PairFunction instance from lambda
+   */
+  public static <T, K, V> PairFunction<T, K, V> of(final IPairFunction<T, K, V> f) {
+      return new PairFunction<T, K, V>() {
+          @Override
+          public Tuple2<K, V> call(T t) throws Exception {
+              return f.apply(t);
+          }
+      };
+  }
 }

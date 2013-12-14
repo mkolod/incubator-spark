@@ -17,30 +17,10 @@
 
 package org.apache.spark.api.java.function;
 
+import scala.Tuple2;
 
 import java.io.Serializable;
 
-/**
- * A function that returns Doubles, and can be used to construct DoubleRDDs.
- */
-// DoubleFunction does not extend Function because some UDF functions, like map,
-// are overloaded for both Function and DoubleFunction.
-public abstract class DoubleFunction<T> extends WrappedFunction1<T, Double>
-  implements Serializable {
-    // Intentionally left blank
-
-    /**
-     * Support for Java 8 lambdas. Accepts a lambda and returns the DoubleFunction
-     * instance compatible with the Java 6/7 API
-     * @param f a lambda or instance of IDoubleFunction
-     * @return a DoubleFunction instance from lambda
-     */
-  public static <T> DoubleFunction<T> of(final IDoubleFunction<T> f) {
-      return new DoubleFunction<T>() {
-          @Override
-          public Double call(T t) {
-              return f.apply(t);
-          }
-      };
-  }
+public interface IPairFlatMapFunction<T, K, V> extends java.io.Serializable {
+    public Iterable<Tuple2<K, V>> apply(T t);
 }

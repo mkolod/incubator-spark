@@ -40,4 +40,19 @@ public abstract class PairFlatMapFunction<T, K, V>
   public ClassTag<V> valueType() {
     return (ClassTag<V>) ClassTag$.MODULE$.apply(Object.class);
   }
+
+  /**
+   * Support for Java 8 lambdas. Accepts a lambda and returns the PairFlatMapFunction
+   * instance compatible with the Java 6/7 API
+   * @param f a lambda or instance of IPairFlatMapFunction
+   * @return a PairFlatMapFunction instance from lambda
+   */
+  public static <T, K, V> PairFlatMapFunction<T, K, V> of(final IPairFlatMapFunction<T, K, V> f) {
+      return new PairFlatMapFunction<T, K, V>() {
+          @Override
+          public Iterable<Tuple2<K, V>> call(T t) {
+              return f.apply(t);
+          }
+      };
+  }
 }

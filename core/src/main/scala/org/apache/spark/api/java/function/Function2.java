@@ -31,5 +31,20 @@ public abstract class Function2<T1, T2, R> extends WrappedFunction2<T1, T2, R>
   public ClassTag<R> returnType() {
     return (ClassTag<R>) ClassTag$.MODULE$.apply(Object.class);
   }
+
+    /**
+     * Support for Java 8 lambdas. Accepts a lambda and returns the Function2 instance
+     * compatible with the Java 6/7 API
+     * @param f a lambda or instance of IFunction2
+     * @return a Function2 instance from lambda
+     */
+  public static <T1, T2, R> Function2<T1, T2, R> of(final IFunction2<T1, T2, R> f) {
+      return new Function2<T1, T2, R>() {
+          @Override
+          public R call(T1 t1, T2 t2) {
+              return f.apply(t1, t2);
+          }
+      };
+  }
 }
 

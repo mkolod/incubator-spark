@@ -30,4 +30,14 @@ abstract class VoidFunction[T] extends Serializable {
 // return Unit), so it is implicitly converted to a Function1[T, Unit]:
 object VoidFunction {
   implicit def toFunction[T](f: VoidFunction[T]) : Function1[T, Unit] = ((x : T) => f.call(x))
+
+  /**
+   * Support for Java 8 lambdas. Accepts a lambda and returns the VoidFunction
+   * instance compatible with the Java 6/7 API
+   * @param f a lambda or instance of IVoidFunction
+   * @return a VoidFunction instance from lambda
+   */
+  def of[T](f: IVoidFunction[T]): VoidFunction[T] = new VoidFunction[T]() {
+    override def call(t: T): Unit = f.apply(t)
+  }
 }

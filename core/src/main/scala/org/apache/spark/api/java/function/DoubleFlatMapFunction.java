@@ -28,4 +28,19 @@ import java.io.Serializable;
 public abstract class DoubleFlatMapFunction<T> extends WrappedFunction1<T, Iterable<Double>>
   implements Serializable {
     // Intentionally left blank
+
+    /**
+     * Support for Java 8 lambdas. Accepts a lambda and returns the DoubleFlatMapFunction
+     * instance compatible with the Java 6/7 API
+     * @param f a lambda or instance of IDoubleFlatMapFunction
+     * @return a DoubleFlatMapFunction instance from lambda
+     */
+    public static <T> DoubleFlatMapFunction<T> of(final IDoubleFlatMapFunction<T> f) {
+        return new DoubleFlatMapFunction<T>() {
+            @Override
+            public Iterable<Double> call(final T t) throws Exception {
+                return f.apply(t);
+            }
+        };
+    }
 }

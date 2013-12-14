@@ -32,5 +32,20 @@ public abstract class Function<T, R> extends WrappedFunction1<T, R> implements S
   public ClassTag<R> returnType() {
     return ClassTag$.MODULE$.apply(Object.class);
   }
+
+    /**
+     * Support for Java 8 lambdas. Accepts a lambda and returns the Function instance
+     * compatible with the Java 6/7 API
+     * @param f a lambda or instance of IFunction
+     * @return a Function instance from lambda
+     */
+  public static <T, R> Function<T,R> of(final IFunction<T,R> f) {
+      return new Function<T, R>() {
+          @Override
+          public R call(T t) {
+              return f.apply(t);
+          }
+      };
+  }
 }
 
